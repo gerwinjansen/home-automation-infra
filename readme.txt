@@ -1,6 +1,6 @@
 Install ArgoCD
     kubectl create namespace argocd
-    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.10.9/manifests/install.yaml
+    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.11.0/manifests/install.yaml
     kubectl port-forward -n argocd svc/argocd-server 8443:443
     kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | openssl base64 -d
 
