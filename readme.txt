@@ -1,6 +1,5 @@
 Install ArgoCD
-    kubectl create namespace argocd
-    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.11.0/manifests/install.yaml
+    helm install --create-namespace --namespace argocd argocd .\argocd\ -f .\argocd\values.yaml
     kubectl port-forward -n argocd svc/argocd-server 8443:443
     kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | openssl base64 -d
 
@@ -10,6 +9,5 @@ Create ca-key-pair
     kubectl create secret tls -n cert-manager ca-key-pair --cert=jansen-root-ca.cer --key=jansen-root-ca-plain.key
 
 Bootstrap
-    kubectl patch -n argocd configmap/argocd-cm --patch-file argocd/patches/enable-app-health-for-sync-waves.yaml
     kubectl apply -n argocd -f infra-apps/infra-project.yaml
     kubectl apply -n argocd -f infra-apps/infra-app-of-apps.yaml

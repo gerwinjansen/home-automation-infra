@@ -1,0 +1,14 @@
+argocd:
+  server:
+    ingress:
+      enabled: true
+      controller: generic
+      annotations:
+        cert-manager.io/cluster-issuer: jansen-ca-issuer
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      ingressClassName: "nginx"
+      hostname: "localhost"
+      path: /
+      pathType: Prefix
+      tls: true

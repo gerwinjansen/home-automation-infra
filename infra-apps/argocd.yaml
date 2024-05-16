@@ -11,8 +11,10 @@ spec:
     repoURL: 'https://github.com/gerwinjansen/home-automation-infra.git'
     path: argocd
     targetRevision: HEAD
-    kustomize:
-      namespace: argocd
+    helm:
+      valueFiles:
+        - values.yaml
+        - ingress-values.yaml
   destination:
     name: in-cluster
     namespace: argocd
