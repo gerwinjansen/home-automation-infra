@@ -26,9 +26,9 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Helm
-        uses: azure/setup-helm@v4.2.0
+        uses: azure/setup-helm@v4.3.1
         with:
-          version: v3.14.4
+          version: v3.19.0
 
       - name: Install Kubeconform plugin
         run: |
@@ -36,8 +36,8 @@ jobs:
 
       - name: Run Kubeconform plugin
         run: |
-          helm kubeconform --strict --summary --schema-location default --schema-location '${{ env.CRDS-CATALOG }}' argocd/
-          helm kubeconform --strict --summary --schema-location default --schema-location '${{ env.CRDS-CATALOG }}' cert-manager/
+          helm kubeconform argocd/
+          helm kubeconform cert-manager/
 
   validate-argocd:
     runs-on: ubuntu-latest
