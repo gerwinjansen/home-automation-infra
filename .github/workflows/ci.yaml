@@ -1,0 +1,70 @@
+name: Validate charts and manifests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  CRDS_CATALOG: https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json
+  K8S_SCHEMAS: https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/{{.NormalizedKubernetesVersion}}/{{.ResourceKind}}.json
+  KUSTOMIZE_SCHEMA: https://json.schemastore.org/{{.ResourceKind}}.json
+
+jobs:
+  validate-helm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4.3.1
+        with:
+          version: v3.19.0
+
+      - name: Install Kubeconform plugin
+        run: |
+          helm plugin install https://github.com/jtyr/kubeconform-helm
+
+      - name: Run Kubeconform for argocd
+        run: |
+          helm kubeconform --strict --summary \
+             --schema-location default \
+             --schema-location ${{ env.CRDS_CATALOG }} \
+             --schema-location ${{ env.K8S_SCHEMAS }} \
+             --schema-location ${{ env.KUSTOMIZE_SCHEMA }} \
+             argocd/
+
+      - name: Run Kubeconform for cert-manager
+        if: always()
+        run: |
+          helm kubeconform --strict --summary \
+             --schema-location default \
+             --schema-location ${{ env.CRDS_CATALOG }} \
+             --schema-location ${{ env.K8S_SCHEMAS }} \
+             --schema-location ${{ env.KUSTOMIZE_SCHEMA }} \
+             cert-manager/
+
+  validate-argocd:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Run Kubeconform
+        uses: docker://ghcr.io/yannh/kubeconform:latest
+        with:
+          entrypoint: '/kubeconform'
+          args: "-strict -summary -schema-location default -schema-location ${{ env.CRDS_CATALOG }} infra-apps/"
