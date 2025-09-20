@@ -14,7 +14,9 @@ on:
   workflow_dispatch:
 
 env:
-  CRDS-CATALOG: https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json
+  CRDS_CATALOG: https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json
+  K8S_SCHEMAS: https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/{{.NormalizedKubernetesVersion}}/{{.ResourceKind}}.json
+  KUSTOMIZE_SCHEMA: https://json.schemastore.org/{{.ResourceKind}}.json
 
 jobs:
   validate-helm:
@@ -34,12 +36,24 @@ jobs:
         run: |
           helm plugin install https://github.com/jtyr/kubeconform-helm
 
-      - name: Run Kubeconform plugin
+      - name: Run Kubeconform for argocd
         run: |
-          cd argocd/
-          helm kubeconform .
-          cd ../cert-manager/
-          helm kubeconform .
+          helm kubeconform --strict --summary --output pretty \
+             --schema-location default \
+             --schema-location ${{ env.CRDS_CATALOG }} \
+             --schema-location ${{ env.K8S_SCHEMAS }} \
+             --schema-location ${{ env.KUSTOMIZE_SCHEMA }} \
+             argocd/
+
+      - name: Run Kubeconform for cert-manager
+        run: |
+          helm kubeconform --strict --summary --output pretty \
+             --schema-location default \
+             --schema-location ${{ env.CRDS_CATALOG }} \
+             --schema-location ${{ env.K8S_SCHEMAS }} \
+             --schema-location ${{ env.KUSTOMIZE_SCHEMA }} \
+             argocd/
+          helm kubeconform cert-manager/
 
   validate-argocd:
     runs-on: ubuntu-latest
@@ -53,4 +67,4 @@ jobs:
         uses: docker://ghcr.io/yannh/kubeconform:latest
         with:
           entrypoint: '/kubeconform'
-          args: "-strict -summary -schema-location default -schema-location ${{ env.CRDS-CATALOG }} infra-apps/"
+          args: "-strict -summary -output pretty -schema-location default -schema-location ${{ env.CRDS_CATALOG }} infra-apps/"
