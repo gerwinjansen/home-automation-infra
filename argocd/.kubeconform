@@ -5,5 +5,5 @@ schema-location:
   - https://json.schemastore.org/{{.ResourceKind}}.json
 # Command line options that can be specified without a value must have boolean value in the config file
 summary: true
-pretty: true
+output: pretty
 strict: true
