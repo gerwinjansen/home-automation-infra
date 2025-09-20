@@ -1,8 +1,17 @@
 name: Validate charts and manifests
 
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - main
+  workflow_dispatch:
 
 env:
   CRDS-CATALOG: https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json
@@ -27,8 +36,8 @@ jobs:
 
       - name: Run Kubeconform plugin
         run: |
-          helm kubeconform --summary --schema-location default --schema-location ${{ env.CRDS-CATALOG }} argocd/
-          helm kubeconform --summary --schema-location default --schema-location ${{ env.CRDS-CATALOG }} cert-manager/
+          helm kubeconform --strict --summary --schema-location default --schema-location '${{ env.CRDS-CATALOG }}' argocd/
+          helm kubeconform --strict --summary --schema-location default --schema-location '${{ env.CRDS-CATALOG }}' cert-manager/
 
   validate-argocd:
     runs-on: ubuntu-latest
@@ -42,4 +51,4 @@ jobs:
         uses: docker://ghcr.io/yannh/kubeconform:latest
         with:
           entrypoint: '/kubeconform'
-          args: "-summary -schema-location default -schema-location ${{ env.CRDS-CATALOG }} infra-apps/"
+          args: "-strict -summary -schema-location default -schema-location ${{ env.CRDS-CATALOG }} infra-apps/"
