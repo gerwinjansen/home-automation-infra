@@ -4,6 +4,9 @@ on:
   - push
   - pull_request
 
+env:
+  CRDS-CATALOG: https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json
+
 jobs:
   validate-helm:
     runs-on: ubuntu-latest
@@ -24,8 +27,8 @@ jobs:
 
       - name: Run Kubeconform plugin
         run: |
-          helm kubeconform --summary argocd/
-          helm kubeconform --summary cert-manager/
+          helm kubeconform --summary --schema-location default --schema-location ${{ env.CRDS-CATALOG }} argocd/
+          helm kubeconform --summary --schema-location default --schema-location ${{ env.CRDS-CATALOG }} cert-manager/
 
   validate-argocd:
     runs-on: ubuntu-latest
@@ -39,4 +42,4 @@ jobs:
         uses: docker://ghcr.io/yannh/kubeconform:latest
         with:
           entrypoint: '/kubeconform'
-          args: "-summary -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' infra-apps/"
+          args: "-summary -schema-location default -schema-location ${{ env.CRDS-CATALOG }} infra-apps/"
