@@ -36,8 +36,10 @@ jobs:
 
       - name: Run Kubeconform plugin
         run: |
-          helm kubeconform argocd/
-          helm kubeconform cert-manager/
+          cd argocd/
+          helm kubeconform .
+          cd ../cert-manager/
+          helm kubeconform .
 
   validate-argocd:
     runs-on: ubuntu-latest
