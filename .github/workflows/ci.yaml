@@ -38,7 +38,7 @@ jobs:
 
       - name: Run Kubeconform for argocd
         run: |
-          helm kubeconform --strict --summary --output pretty \
+          helm kubeconform --strict --summary \
              --schema-location default \
              --schema-location ${{ env.CRDS_CATALOG }} \
              --schema-location ${{ env.K8S_SCHEMAS }} \
@@ -46,8 +46,9 @@ jobs:
              argocd/
 
       - name: Run Kubeconform for cert-manager
+        if: always()
         run: |
-          helm kubeconform --strict --summary --output pretty \
+          helm kubeconform --strict --summary \
              --schema-location default \
              --schema-location ${{ env.CRDS_CATALOG }} \
              --schema-location ${{ env.K8S_SCHEMAS }} \
@@ -67,4 +68,4 @@ jobs:
         uses: docker://ghcr.io/yannh/kubeconform:latest
         with:
           entrypoint: '/kubeconform'
-          args: "-strict -summary -output pretty -schema-location default -schema-location ${{ env.CRDS_CATALOG }} infra-apps/"
+          args: "-strict -summary -schema-location default -schema-location ${{ env.CRDS_CATALOG }} infra-apps/"
