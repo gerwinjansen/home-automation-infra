@@ -9,8 +9,8 @@ spec:
   project: infra
   source:
     repoURL: 'https://github.com/gerwinjansen/home-automation-infra.git'
+    targetRevision: main
     path: cert-manager
-    targetRevision: HEAD
   destination:
     name: in-cluster
     namespace: cert-manager

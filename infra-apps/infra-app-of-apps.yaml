@@ -9,8 +9,8 @@ spec:
   project: infra
   source:
     repoURL: 'https://github.com/gerwinjansen/home-automation-infra.git'
+    targetRevision: task/add-otel-collector
     path: infra-apps
-    targetRevision: HEAD
   destination:
     name: in-cluster
     namespace: argocd

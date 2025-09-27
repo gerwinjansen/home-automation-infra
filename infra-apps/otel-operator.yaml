@@ -1,23 +1,21 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd
+  name: otel-operator
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-wave: "4"
 spec:
   project: infra
   source:
     repoURL: 'https://github.com/gerwinjansen/home-automation-infra.git'
-    targetRevision: main
-    path: argocd
-    helm:
-      valueFiles:
-        - values.yaml
-        - ingress-values.yaml
+    targetRevision: task/add-otel-operator
+    path: otel-operator
   destination:
     name: in-cluster
-    namespace: argocd
+    namespace: otel-operator
   syncPolicy:
     automated:
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

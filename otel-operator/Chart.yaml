@@ -1,0 +1,9 @@
+apiVersion: v2
+name: otel-operator
+type: application
+version: 0.0.0
+appVersion: "0.0.0"
+dependencies:
+  - name: opentelemetry-operator
+    version: v0.95.3
+    repository: https://open-telemetry.github.io/opentelemetry-helm-charts
