@@ -1,0 +1,12 @@
+apiVersion: akri.sh/v0
+kind: Configuration
+metadata:
+  name: akri-zbt-2
+spec:
+  capacity: 1
+  discoveryHandler:
+    name: udev
+    discoveryDetails: |
+      groupRecursive: true
+      udevRules:
+      - ATTRS{manufacturer}=="Nabu Casa", ATTRS{product}=="ZBT-2"

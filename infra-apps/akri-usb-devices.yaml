@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: akri-usb-devices
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+spec:
+  project: infra
+  source:
+    repoURL: 'https://github.com/gerwinjansen/home-automation-infra.git'
+    path: akri-usb-devices
+    targetRevision: HEAD
+  destination:
+    name: in-cluster
+    namespace: akri-usb-devices
+  syncPolicy:
+    automated:
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

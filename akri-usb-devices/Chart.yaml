@@ -1,0 +1,9 @@
+apiVersion: v2
+name: akri-usb-devices
+type: application
+version: 0.0.0
+appVersion: "0.0.0"
+dependencies:
+- name: akri
+  version: 0.13.8
+  repository: https://project-akri.github.io/akri/
