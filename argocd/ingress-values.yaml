@@ -5,9 +5,7 @@ argocd:
       controller: generic
       annotations:
         cert-manager.io/cluster-issuer: jansen-ca-issuer
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-      ingressClassName: "nginx"
+      ingressClassName: "traefik"
       hostname: "argocd.jansen.lan"
       path: /
       pathType: Prefix
