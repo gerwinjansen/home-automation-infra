@@ -1,5 +1,7 @@
 argocd:
   configs:
+    params:
+      server.insecure: true
     cm:
       # NOTE: You may want to modify this behavior to bootstrap your cluster in waves; see v1.8 upgrade notes
       # https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/
