@@ -3,3 +3,5 @@ akri:
   udev:
     discovery:
       enabled: true
+  webhookConfiguration:
+    enabled: false
