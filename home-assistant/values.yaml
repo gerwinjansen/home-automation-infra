@@ -15,7 +15,7 @@ home-assistant:
   resources:
     limits:
       akri.sh/akri-zbt-2: "1"
-      akri-dsmr-p1-to-usb: "1"
+      akri.sh/akri-dsmr-p1-to-usb: "1"
     requests:
       akri.sh/akri-zbt-2: "1"
-      akri-dsmr-p1-to-usb: "1"
+      akri.sh/akri-dsmr-p1-to-usb: "1"
