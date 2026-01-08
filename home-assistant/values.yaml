@@ -13,7 +13,6 @@ home-assistant:
       - hosts:
           - home-assistant.jansen.lan
         secretName: home-assistant-tls
-  
 
   resources:
     limits:
@@ -22,3 +21,11 @@ home-assistant:
     requests:
       akri.sh/akri-zbt-2: "1"
       akri.sh/akri-dsmr-p1-to-usb: "1"
+
+  configuration:
+    enabled: true
+    # Force init will merge the current configuration file with the default configuration on every start
+    # This is useful when you want to ensure that the configuration file is always up to date
+    forceInit: true
+    trusted_proxies:
+      - 10.0.0.0/8
