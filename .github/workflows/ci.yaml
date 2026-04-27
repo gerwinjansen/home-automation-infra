@@ -34,12 +34,27 @@ jobs:
     
       - name: Add Helm repositories
         run: |
-          helm repo add argo https://argoproj.github.io/argo-helm
-          helm repo add jetstack https://charts.jetstack.io
+          helm repo add argoproj       https://argoproj.github.io/argo-helm
+          helm repo add jetstack       https://charts.jetstack.io
+          helm repo add akri           https://project-akri.github.io/akri/
+          helm repo add home-assistant https://pajikos.github.io/home-assistant-helm-chart/
 
       - name: Install Kubeconform plugin
         run: |
           helm plugin install --verify=false https://github.com/jtyr/kubeconform-helm
+
+      - name: Build akri-usb-devices
+        run: |
+          helm dependency build akri-usb-devices/
+
+      - name: Run Kubeconform for akri-usb-devices
+        run: |
+          helm kubeconform --strict --summary \
+             --schema-location default \
+             --schema-location ${{ env.CRDS_CATALOG }} \
+             --schema-location ${{ env.K8S_SCHEMAS }} \
+             --schema-location ${{ env.KUSTOMIZE_SCHEMA }} \
+             akri-usb-devices/
 
       - name: Build ArgoCD
         run: |
@@ -67,6 +82,20 @@ jobs:
              --schema-location ${{ env.K8S_SCHEMAS }} \
              --schema-location ${{ env.KUSTOMIZE_SCHEMA }} \
              cert-manager/
+
+      - name: Build home-assistant
+        run: |
+          helm dependency build home-assistant/
+
+      - name: Run Kubeconform for home-assistant
+        if: always()
+        run: |
+          helm kubeconform --strict --summary \
+             --schema-location default \
+             --schema-location ${{ env.CRDS_CATALOG }} \
+             --schema-location ${{ env.K8S_SCHEMAS }} \
+             --schema-location ${{ env.KUSTOMIZE_SCHEMA }} \
+             home-assistant/
 
   validate-argocd:
     runs-on: ubuntu-latest
