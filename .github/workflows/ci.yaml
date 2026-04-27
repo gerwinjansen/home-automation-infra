@@ -34,7 +34,7 @@ jobs:
 
       - name: Install Kubeconform plugin
         run: |
-          helm plugin install https://github.com/jtyr/kubeconform-helm
+          helm plugin install --verify=false https://github.com/jtyr/kubeconform-helm
 
       - name: Run Kubeconform for argocd
         run: |
