@@ -31,10 +31,19 @@ jobs:
         uses: azure/setup-helm@v4.3.1
         with:
           version: v4.1.4
+    
+      - name: Add Helm repositories
+        run: |
+          helm repo add argo https://argoproj.github.io/argo-helm
+          helm repo add jetstack https://charts.jetstack.io
 
       - name: Install Kubeconform plugin
         run: |
           helm plugin install --verify=false https://github.com/jtyr/kubeconform-helm
+
+      - name: Build ArgoCD
+        run: |
+          helm dependency build argocd/
 
       - name: Run Kubeconform for argocd
         run: |
@@ -44,6 +53,10 @@ jobs:
              --schema-location ${{ env.K8S_SCHEMAS }} \
              --schema-location ${{ env.KUSTOMIZE_SCHEMA }} \
              argocd/
+
+      - name: Build cert-manager
+        run: |
+          helm dependency build cert-manager/
 
       - name: Run Kubeconform for cert-manager
         if: always()
