@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: akri-webhook-tls
+spec:
+  commonName: {{ .Values.akri.webhookConfiguration.name }}.{{ .Release.Namespace }}.svc
+  dnsNames:
+  - {{ .Values.akri.webhookConfiguration.name }}.{{ .Release.Namespace }}.svc.cluster.local
+  - {{ .Values.akri.webhookConfiguration.name }}.{{ .Release.Namespace }}.svc
+  issuerRef:
+    kind: ClusterIssuer
+    name: jansen-ca-issuer
+  secretName: {{ .Values.akri.webhookConfiguration.name }}

@@ -4,4 +4,4 @@ akri:
     discovery:
       enabled: true
   webhookConfiguration:
-    enabled: false
+    caBundle: Cg==
