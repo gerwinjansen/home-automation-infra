@@ -4,4 +4,4 @@ akri:
     discovery:
       enabled: true
   webhookConfiguration:
-    caBundle: Cg==
+    caBundle: Cg== # will be overwritten by akri-webhook-tls
