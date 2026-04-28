@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: 'https://github.com/gerwinjansen/home-automation-infra.git'
     path: akri-usb-devices
-    targetRevision: akri-webhook-tls
+    targetRevision: HEAD
   destination:
     name: in-cluster
     namespace: akri-usb-devices
