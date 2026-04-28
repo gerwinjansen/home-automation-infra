@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: 'https://github.com/gerwinjansen/home-automation-infra.git'
     path: argocd
-    targetRevision: HEAD
+    targetRevision: akri-webhook-tls
     helm:
       valueFiles:
         - values.yaml
