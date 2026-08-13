@@ -20,6 +20,12 @@ home-assistant:
     requests:
       akri.sh/akri-dsmr-p1-to-usb: "1"
 
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    storageClass: local-path
+
   configuration:
     enabled: true
     # Force init will merge the current configuration file with the default configuration on every start
